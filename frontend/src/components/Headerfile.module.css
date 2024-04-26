@@ -1,0 +1,38 @@
+.header {
+    background-color: yellow;
+    color: red;
+    height: 60px;
+    padding: 0 20px; 
+    font-weight: bold;
+    display: flex;
+    align-items: center; 
+    justify-content: space-between; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .users {
+    font-size: 1.75em;
+    flex: 0 0 auto; 
+    text-align: left; 
+  }
+  
+  .titles {
+    font-size: 1.75em;
+    flex-grow: 1; 
+    text-align: center;
+  }
+  
+  .logoutBtn {
+    flex: 0 0 auto; 
+    text-align: right; 
+  }
+  
+  .btn {
+    background-color: red;
+    color: white;
+    padding: 10px 20px; 
+    cursor: pointer;
+    border-radius: 20px;
+    text-decoration: none;
+  }
+  

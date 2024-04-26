@@ -1,0 +1,28 @@
+.todolistitem{
+    font-size: 20px;
+    color: black;
+    margin: 0 auto;
+}
+.todoitem{
+    font-weight: bold;
+    padding: 10px;
+}
+
+.line{
+    border: 1px solid #f4f4f4;
+}
+
+.todobutton{
+    background-color: rgb(255, 54, 54);
+    float: right;
+    padding: 12px 20px;
+    border: none;
+    color: white;
+    margin-top: -5px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.checked{
+    text-decoration: line-through;
+}
