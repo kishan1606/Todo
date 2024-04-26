@@ -1,6 +1,8 @@
 import express from "express";
 import mysql from "mysql";
 import cors from "cors";
+import bcrypt from "bcrypt";
+const saltRounds = 10;
 
 const app = express();
 app.use(cors());
@@ -25,33 +27,47 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/signup", (req, res) => {
-  const sql = "INSERT INTO login(`name`,`email`,`password`,`username`) VALUES (?)";
-  const values = [req.body.name, req.body.email, req.body.password, req.body.username];
-  db.query(sql, [values], (err, data) => {
+  const pswd = req.body.password.toString();
+  bcrypt.hash(pswd, saltRounds, (err, hash) => {
     if (err) {
-      return res.json("Error");
+      console.log(err);
     }
-    return res.json("created successufully");
+    const sql =
+      "INSERT INTO login(`name`,`email`,`password`,`username`) VALUES (?)";
+    const values = [req.body.name, req.body.email, hash, req.body.username];
+    db.query(sql, [values], (err, data) => {
+      if (err) {
+        return res.json("Error");
+      }
+      return res.json("created successufully");
+    });
   });
 });
 
 app.post("/login", (req, res) => {
-  const sql = "SELECT * FROM login WHERE username = ? AND password = ?";
-  db.query(sql, [req.body.username, req.body.password], (err, data) => {
+  const password = req.body.password.toString();
+  const sql = "SELECT * FROM login WHERE username = ?";
+  db.query(sql, [req.body.username], (err, data) => {
     if (err) {
       return res.json("Error");
     }
     if (data.length > 0) {
-      return res.json("Success");
+      bcrypt.compare(password, data[0].password, (error, response) => {
+        if (response) {
+          res.json("Success");
+        } else {
+          res.json("Wrong username/password combination!");
+        }
+      });
     } else {
-      return res.json("Faile");
+      return res.json("User dont exist");
     }
   });
 });
 
 app.post("/todo", (req, res) => {
   const sql = "INSERT INTO todolist(`todo`,`author`,`checked`) VALUES (?)";
-  const values = [req.body.todo,req.body.author,req.body.checked ];
+  const values = [req.body.todo, req.body.author, req.body.checked];
   db.query(sql, [values], (err, data) => {
     if (err) {
       return res.json("Error creating todo");
@@ -83,11 +99,13 @@ app.delete("/todo/:id", (req, res) => {
 
 app.get("/todo", (req, res) => {
   const q = "SELECT * FROM todolist WHERE author = ?";
-  const author = req.query.author 
+  const author = req.query.author;
   if (!author) {
-    return res.status(400).json({ error: "Username not found in localStorage" });
+    return res
+      .status(400)
+      .json({ error: "Username not found in localStorage" });
   }
-  db.query(q,  [author], (err, data) => {
+  db.query(q, [author], (err, data) => {
     if (err) {
       console.log(err);
       return res.json(err);

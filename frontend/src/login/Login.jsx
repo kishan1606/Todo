@@ -32,7 +32,7 @@ function Login() {
             localStorage.setItem("username", values.username);
             navigate("/home");
           } else {
-            alert("No record existed");
+            alert(res.data);
             console.log(res);
           }
         }

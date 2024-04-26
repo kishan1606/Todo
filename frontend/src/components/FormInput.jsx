@@ -33,7 +33,7 @@ const FormInput = ({ todoList, setTodoList }) => {
   };
   return (
     <div className={styles.maindiv}>
-      <form onSubmit={handleSubmit} className={styles.todoform}>
+      <form onSubmit={handleSubmit} className={styles.todoform} autoComplete="off">
         <div className={styles.formdiv}>
           <input
             className={styles.forminput}
